@@ -31,10 +31,10 @@ class Browser {
 
     await browser.close();
     return result.sort((a, b) => {
-      if (a.date < b.date) {
+      if (a.date > b.date) {
         return -1;
       }
-      if (a.date > b.date) {
+      if (a.date < b.date) {
         return 1;
       }
       if (a.pourvoi < b.pourvoi) {
