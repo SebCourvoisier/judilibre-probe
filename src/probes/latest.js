@@ -23,13 +23,13 @@ async function main() {
           if (i < latestFromBrowser.length) {
             if (JSON.stringify(latestFromAPI[i]) !== JSON.stringify(latestFromBrowser[i])) {
               details.push(
-                `- [index ${i + 1}] Browser: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`${JSON.stringify(
+                `[n°${i + 1}] Site: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`${JSON.stringify(
                   latestFromAPI[i],
                 )}\``,
               );
             }
           } else {
-            details.push(`- [index ${i + 1}] Browser: \`empty\` / API: \`${JSON.stringify(latestFromAPI[i])}\``);
+            details.push(`[n°${i + 1}] Site: \`absent\` / API: \`${JSON.stringify(latestFromAPI[i])}\``);
           }
         }
       } else if (latestFromBrowser.length > latestFromAPI.length) {
@@ -37,13 +37,13 @@ async function main() {
           if (i < latestFromAPI.length) {
             if (JSON.stringify(latestFromAPI[i]) !== JSON.stringify(latestFromBrowser[i])) {
               details.push(
-                `- [index ${i + 1}] Browser: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`${JSON.stringify(
+                `[n°${i + 1}] Site: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`${JSON.stringify(
                   latestFromAPI[i],
                 )}\``,
               );
             }
           } else {
-            details.push(`- [index ${i + 1}] Browser: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`empty\``);
+            details.push(`[n°${i + 1}] Site: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`absent\``);
           }
         }
       } else {
@@ -51,14 +51,14 @@ async function main() {
           for (let i = 0; i < latestFromBrowser.length; i++) {
             if (JSON.stringify(latestFromAPI[i]) !== JSON.stringify(latestFromBrowser[i])) {
               details.push(
-                `- [index ${i + 1}] Browser: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`${JSON.stringify(
+                `[n°${i + 1}] Site: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`${JSON.stringify(
                   latestFromAPI[i],
                 )}\``,
               );
             }
           }
         } else {
-          details.push(`- Browser: \`all empty\` / API: \`all empty\``);
+          details.push(`Site: \`vide\` / API: \`vide\``);
         }
       }
       details = details.join('\n');
