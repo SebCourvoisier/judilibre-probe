@@ -36,7 +36,7 @@ async function main() {
       channel: conversationId,
     });
 
-    log.log(`Successfully send message ${result.ts} in conversation ${conversationId}`);
+    log.info(`Successfully send message ${result.ts} in conversation ${conversationId}`);
   })();
 }
 
