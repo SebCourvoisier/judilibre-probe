@@ -30,7 +30,21 @@ class Browser {
     }
 
     await browser.close();
-    return result;
+    return result.sort((a, b) => {
+      if (a.date < b.date) {
+        return -1;
+      }
+      if (a.date > b.date) {
+        return 1;
+      }
+      if (a.pourvoi < b.pourvoi) {
+        return -1;
+      }
+      if (a.pourvoi > b.pourvoi) {
+        return 1;
+      }
+      return 0;
+    });
   }
 }
 
