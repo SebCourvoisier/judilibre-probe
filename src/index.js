@@ -13,7 +13,11 @@ async function main() {
   const latestFromAPI = await API.GetLatest();
   log.info(latestFromBrowser);
   log.info(latestFromAPI);
-  // await Slack.SendMessage('test');
+  if (JSON.stringify(latestFromBrowser) !== JSON.stringify(latestFromAPI)) {
+    await Slack.SendMessage(
+      ":warning: les données du bloc des dernières décisions sur le site ne correspondent pas aux données de l'API",
+    );
+  }
   log.info('end script');
 }
 
