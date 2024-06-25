@@ -13,7 +13,7 @@ class State {
       if (/^[a-z]+$/i.test(key) === false) {
         throw new Error(`invalid key ${key}`);
       }
-      const fileContent = (await fs.readFile(path.join(__dirname, '..', '..', 'state', `${key.json}`))).toString();
+      const fileContent = (await fs.readFile(path.join(__dirname, '..', '..', 'state', `${key}.json`))).toString();
       state = JSON.parse(fileContent);
       return state;
     } catch (e) {
@@ -32,7 +32,7 @@ class State {
       }
       state.time = new Date();
       const fileContent = JSON.stringify(state, null, 2);
-      await fs.writeFile(path.join(__dirname, '..', '..', 'state', `${key.json}`), fileContent);
+      await fs.writeFile(path.join(__dirname, '..', '..', 'state', `${key}.json`), fileContent);
       return true;
     } catch (e) {
       log.error(e);
