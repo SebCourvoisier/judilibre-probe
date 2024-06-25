@@ -11,8 +11,8 @@ async function main() {
   log.info('start script');
   const latestFromBrowser = await Browser.GetLatest();
   const latestFromAPI = await API.GetLatest();
-  log.info('latest from browser', latestFromBrowser);
-  log.info('latest from API', latestFromAPI);
+  log.info(latestFromBrowser);
+  log.info(latestFromAPI);
   // await Slack.SendMessage('test');
   log.info('end script');
 }
