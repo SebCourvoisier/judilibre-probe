@@ -7,13 +7,12 @@ const puppeteer = require('puppeteer');
 
 class Browser {
   static async GetLatest() {
+    const result = [];
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto('https://www.courdecassation.fr');
-
     const searchResultSelector = '#block-derniersarretsblock';
     const derniersArretsBlock = await page.$(searchResultSelector);
-
     const searchArretSelector = '.arret';
     const arretBlocks = await derniersArretsBlock.$$(searchArretSelector);
 
@@ -24,10 +23,14 @@ class Browser {
       const searchPourvoi = 'p.pourvoi';
       const arretPourvoi = await arretBlocks[i].$(searchPourvoi);
       const pourvoiValue = await arretPourvoi.evaluate((el) => el.textContent);
-      log.info([dateValue, pourvoiValue]);
+      result.push({
+        date: dateValue,
+        pourvoi: pourvoiValue,
+      });
     }
 
     await browser.close();
+    return result;
   }
 }
 

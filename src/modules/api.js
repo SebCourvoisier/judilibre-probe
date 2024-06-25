@@ -8,6 +8,7 @@ const { DateTime } = require('luxon');
 
 class API {
   static async GetLatest() {
+    const result = [];
     let response = null;
     try {
       response = await needle(
@@ -22,7 +23,10 @@ class API {
           const dateTime = DateTime.fromISO(response.body.results[i].decision_date);
           const dateValue = dateTime.setLocale('fr').toLocaleString({ month: 'long', day: 'numeric' });
           const pourvoiValue = `Pourvoi n°${response.body.results[i].number}`;
-          log.info([dateValue, pourvoiValue]);
+          result.push({
+            date: dateValue,
+            pourvoi: pourvoiValue,
+          });
         }
       } else {
         log.warn('no data');
@@ -30,6 +34,7 @@ class API {
     } catch (e) {
       log.error(e);
     }
+    return result;
   }
 }
 

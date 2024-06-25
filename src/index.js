@@ -9,8 +9,10 @@ const { Slack } = require('./modules/slack');
 
 async function main() {
   log.info('start script');
-  await Browser.GetLatest();
-  await API.GetLatest();
+  const latestFromBrowser = await Browser.GetLatest();
+  const latestFromAPI = await API.GetLatest();
+  log.info('latest from browser', latestFromBrowser);
+  log.info('latest from API', latestFromAPI);
   // await Slack.SendMessage('test');
   log.info('end script');
 }
