@@ -15,9 +15,21 @@ async function main() {
   const latestFromAPI = await API.GetLatest();
   log.info(latestFromBrowser);
   log.info(latestFromAPI);
+  let details = [];
+  if (
+    state === null ||
+    (state.latestFromBrowser && JSON.stringify(latestFromBrowser) !== JSON.stringify(state.latestFromBrowser))
+  ) {
+    details.push(`:compass: Les données du site ont changé.`);
+  }
+  if (
+    state === null ||
+    (state.latestFromAPI && JSON.stringify(latestFromAPI) !== JSON.stringify(state.latestFromAPI))
+  ) {
+    details.push(`:classical_building: Les données de l'API ont changé.`);
+  }
   if (JSON.stringify(latestFromBrowser) !== JSON.stringify(latestFromAPI)) {
     if (state === null || state.status === true) {
-      let details = [];
       if (latestFromBrowser.length < latestFromAPI.length) {
         for (let i = 0; i < latestFromAPI.length; i++) {
           if (i < latestFromBrowser.length) {
@@ -68,15 +80,19 @@ async function main() {
     }
     await State.SetState('latest', {
       status: false,
+      latestFromAPI: latestFromAPI,
+      latestFromBrowser: latestFromBrowser,
     });
   } else {
     if (state === null || state.status === false) {
       await Slack.SendMessage(
-        ":large_green_square: Les données du bloc des dernières décisions sur le site correspondent de nouveau aux données de l'API.",
+        `:large_green_square: Les données du bloc des dernières décisions sur le site correspondent de nouveau aux données de l'API.\n${details}`,
       );
     }
     await State.SetState('latest', {
       status: true,
+      latestFromAPI: latestFromAPI,
+      latestFromBrowser: latestFromBrowser,
     });
   }
   log.info('end probe');
