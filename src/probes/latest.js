@@ -20,13 +20,13 @@ async function main() {
     state === null ||
     (state.latestFromBrowser && JSON.stringify(latestFromBrowser) !== JSON.stringify(state.latestFromBrowser))
   ) {
-    details.push(`:compass: Les données du site ont changé.`);
+    details.push(`:compass: Les données du site ont changé`);
   }
   if (
     state === null ||
     (state.latestFromAPI && JSON.stringify(latestFromAPI) !== JSON.stringify(state.latestFromAPI))
   ) {
-    details.push(`:classical_building: Les données de l'API ont changé.`);
+    details.push(`:classical_building: Les données de l'API ont changé`);
   }
   if (JSON.stringify(latestFromBrowser) !== JSON.stringify(latestFromAPI)) {
     if (state === null || state.status === true) {
