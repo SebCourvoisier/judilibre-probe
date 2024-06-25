@@ -20,8 +20,11 @@ class Browser {
     for (let i = 0; i < arretBlocks.length; i++) {
       const searchDate = 'p.date';
       const arretDate = await arretBlocks[i].$(searchDate);
-      const value = await arretDate.evaluate((el) => el.textContent);
-      log.info(value);
+      const dateValue = await arretDate.evaluate((el) => el.textContent);
+      const searchPourvoi = 'p.pourvoi';
+      const arretPourvoi = await arretBlocks[i].$(searchPourvoi);
+      const pourvoiValue = await arretPourvoi.evaluate((el) => el.textContent);
+      log.info([dateValue, pourvoiValue]);
     }
 
     await browser.close();

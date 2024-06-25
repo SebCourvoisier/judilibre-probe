@@ -11,7 +11,7 @@ async function main() {
   log.info('start script');
   await Browser.GetLatest();
   await API.GetLatest();
-  await Slack.SendMessage('test');
+  // await Slack.SendMessage('test');
   log.info('end script');
 }
 
