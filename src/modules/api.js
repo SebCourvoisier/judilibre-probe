@@ -4,6 +4,7 @@ const log = logger.child({
 });
 
 const needle = require('needle');
+const { DateTime } = require('luxon');
 
 class API {
   static async GetLatest() {
@@ -18,8 +19,9 @@ class API {
       );
       if (response && response.body && response.body.results && Array.isArray(response.body.results)) {
         for (let i = 0; i < response.body.results.length; i++) {
-          const dateValue = response.body.results[i].decision_date;
-          const pourvoiValue = response.body.results[i].number;
+          const dateTime = DateTime.fromISO(response.body.results[i].decision_date);
+          const dateValue = dateTime.setLocale('fr').toLocaleString({ month: 'long', day: 'numeric' });
+          const pourvoiValue = `Pourvoi n°${response.body.results[i].number}`;
           log.info([dateValue, pourvoiValue]);
         }
       } else {
