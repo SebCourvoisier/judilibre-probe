@@ -3,6 +3,11 @@ const log = logger.child({
   module: 'main',
 });
 
+const { WebClient } = require('@slack/web-api');
+const slackToken = process.env.SLACK_TOKEN;
+const conversationId = process.env.SLACK_CHANNEL;
+const slackWebClient = new WebClient(slackToken);
+
 const puppeteer = require('puppeteer');
 
 async function main() {
@@ -24,6 +29,15 @@ async function main() {
   }
 
   await browser.close();
+
+  (async () => {
+    const result = await slackWebClient.chat.postMessage({
+      text: 'Hello world (from script)!',
+      channel: conversationId,
+    });
+
+    log.log(`Successfully send message ${result.ts} in conversation ${conversationId}`);
+  })();
 }
 
 main();
