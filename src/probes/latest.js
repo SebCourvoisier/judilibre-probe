@@ -25,7 +25,7 @@ async function main() {
       status: false,
     });
   } else {
-    if (state && state.status === false) {
+    if (state === null || state.status === false) {
       await Slack.SendMessage(
         ":large_green_square:	les données du bloc des dernières décisions sur le site correspondent de nouveau aux données de l'API",
       );
