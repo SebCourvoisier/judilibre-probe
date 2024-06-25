@@ -3,22 +3,20 @@ const log = logger.child({
   module: 'main',
 });
 
-const { Browser } = require('./modules/browser');
-const { API } = require('./modules/api');
-const { Slack } = require('./modules/slack');
+const Graceful = require('@ladjs/graceful');
+const Bree = require('bree');
 
-async function main() {
-  log.info('start script');
-  const latestFromBrowser = await Browser.GetLatest();
-  const latestFromAPI = await API.GetLatest();
-  log.info(latestFromBrowser);
-  log.info(latestFromAPI);
-  if (JSON.stringify(latestFromBrowser) !== JSON.stringify(latestFromAPI)) {
-    await Slack.SendMessage(
-      ":warning: les données du bloc des dernières décisions sur le site ne correspondent pas aux données de l'API",
-    );
-  }
-  log.info('end script');
-}
+const bree = new Bree({
+  root: require('path').join(__dirname, 'probes'),
+  jobs: [
+    {
+      name: 'latest',
+      interval: 'every 5 minute after 8:00am and before 11:00pm',
+    },
+  ],
+});
 
-main();
+const graceful = new Graceful({ brees: [bree] });
+graceful.listen();
+log.info('start');
+bree.start();

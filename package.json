@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "@ladjs/graceful": "^3.2.2",
     "@slack/web-api": "^7.2.0",
+    "bree": "^9.2.3",
     "dotenv": "^16.4.5",
     "luxon": "^3.4.4",
     "needle": "^3.3.1",
