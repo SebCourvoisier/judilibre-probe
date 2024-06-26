@@ -1,5 +1,3 @@
-// https://www.courdecassation.fr/acces-rapide-judilibre
-
 const { logger } = require('../modules/logger');
 const log = logger.child({
   module: 'search',
@@ -36,9 +34,11 @@ async function main() {
   if (JSON.stringify(searchFromBrowser) !== JSON.stringify(searchFromAPI)) {
     if (changed === true || state === null || state.status === true) {
       details = details.join('\n');
+      /*
       await Slack.SendMessage(
         `:large_red_square: Les résultats de la recherche sur le site ne correspondent pas aux résultats de l'API:\n${details}`,
       );
+      */
     }
     await State.SetState('search', {
       status: false,
@@ -47,9 +47,11 @@ async function main() {
     });
   } else {
     if (changed === true || state === null || state.status === false) {
+      /*
       await Slack.SendMessage(
         `:large_green_square: Les résultats de la recherche sur le site correspondent de nouveau aux résultats de l'API.\n${details}`,
       );
+      */
     }
     await State.SetState('search', {
       status: true,
