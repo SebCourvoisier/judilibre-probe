@@ -60,7 +60,7 @@ class API {
       }
       response = await needle(
         'get',
-        `https://search.judilibre.io/search?query=${query}&resolve_references=true&jurisdiction=cc&jurisdiction=ca&jurisdiction=tj`,
+        `https://search.judilibre.io/search?query=${query}&resolve_references=true&jurisdiction=cc&jurisdiction=ca&jurisdiction=tj&sort=date&order=desc`,
         {
           rejectUnauthorized: false,
         },
