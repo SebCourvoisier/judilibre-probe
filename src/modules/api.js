@@ -75,6 +75,7 @@ class API {
           }
           const pourvoiValue = `${label} n°${response.body.results[i].number}`;
           result.push({
+            source: 'api',
             date: dateValue,
             pourvoi: pourvoiValue,
           });
