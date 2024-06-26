@@ -69,7 +69,11 @@ class API {
         for (let i = 0; i < response.body.results.length; i++) {
           const dateTime = DateTime.fromISO(response.body.results[i].decision_date);
           const dateValue = dateTime.setLocale('fr').toLocaleString({ month: 'long', day: 'numeric', year: 'numeric' });
-          const pourvoiValue = `Pourvoi n°${response.body.results[i].number}`;
+          let label = 'Pourvoi';
+          if (/cassation/i.test(response.body.results[i].jurisdiction) === false) {
+            label = 'RG';
+          }
+          const pourvoiValue = `${label} n°${response.body.results[i].number}`;
           result.push({
             date: dateValue,
             pourvoi: pourvoiValue,
