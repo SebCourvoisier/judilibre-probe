@@ -78,7 +78,7 @@ class Browser {
         const titleElements = `${titleValue}`.trim().split(/\s-\s/);
         result.push({
           date: `${titleElements[0]}`.trim(),
-          pourvoi: `${titleElements[2]}`.trim(),
+          pourvoi: `${titleElements[2]}`.replace(/°.*(\d)/, '°$1').trim(),
         });
       }
       await browser.close();
