@@ -77,7 +77,6 @@ class Browser {
         const titleValue = await arretTitle.evaluate((el) => el.textContent);
         const titleElements = `${titleValue}`.trim().split(/\s-\s/);
         result.push({
-          source: 'site',
           date: `${titleElements[0]}`.trim(),
           pourvoi: `${titleElements[2]}`.replace(/°\s+(\d)/gim, '°$1').trim(),
         });
@@ -90,21 +89,6 @@ class Browser {
       log.warn('no data');
     }
     return result;
-    return result.sort((a, b) => {
-      if (a.date > b.date) {
-        return -1;
-      }
-      if (a.date < b.date) {
-        return 1;
-      }
-      if (a.pourvoi < b.pourvoi) {
-        return -1;
-      }
-      if (a.pourvoi > b.pourvoi) {
-        return 1;
-      }
-      return 0;
-    });
   }
 }
 
