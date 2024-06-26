@@ -58,9 +58,13 @@ class API {
       if (query === undefined) {
         query = '*';
       }
-      response = await needle('get', `https://search.judilibre.io/search?query=${query}&resolve_references=true`, {
-        rejectUnauthorized: false,
-      });
+      response = await needle(
+        'get',
+        `https://search.judilibre.io/search?query=${query}&resolve_references=true&jurisdiction=cc&jurisdiction=ca&jurisdiction=tj`,
+        {
+          rejectUnauthorized: false,
+        },
+      );
       if (response && response.body && response.body.results && Array.isArray(response.body.results)) {
         for (let i = 0; i < response.body.results.length; i++) {
           const dateTime = DateTime.fromISO(response.body.results[i].decision_date);
