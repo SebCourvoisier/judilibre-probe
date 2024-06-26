@@ -13,8 +13,6 @@ async function main() {
   const state = await State.GetState('latest');
   const latestFromBrowser = await Browser.GetLatest();
   const latestFromAPI = await API.GetLatest();
-  log.info(latestFromBrowser);
-  log.info(latestFromAPI);
   let details = [];
   let changed = false;
   if (
@@ -22,14 +20,14 @@ async function main() {
     (state.latestFromBrowser && JSON.stringify(latestFromBrowser) !== JSON.stringify(state.latestFromBrowser))
   ) {
     changed = true;
-    details.push(`:compass: Les données du site ont changé`);
+    details.push(`:compass: Les données affichées par le site ont changé`);
   }
   if (
     state === null ||
     (state.latestFromAPI && JSON.stringify(latestFromAPI) !== JSON.stringify(state.latestFromAPI))
   ) {
     changed = true;
-    details.push(`:classical_building: Les données de l'API ont changé`);
+    details.push(`:classical_building: Les données retournées par l'API ont changé`);
   }
   if (JSON.stringify(latestFromBrowser) !== JSON.stringify(latestFromAPI)) {
     if (changed === true || state === null || state.status === true) {
