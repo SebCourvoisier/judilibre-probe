@@ -81,6 +81,7 @@ class API {
     } catch (e) {
       log.error(e);
     }
+    return result;
     return result.sort((a, b) => {
       if (a.date > b.date) {
         return -1;
