@@ -16,20 +16,23 @@ async function main() {
   log.info(latestFromBrowser);
   log.info(latestFromAPI);
   let details = [];
+  let changed = false;
   if (
     state === null ||
     (state.latestFromBrowser && JSON.stringify(latestFromBrowser) !== JSON.stringify(state.latestFromBrowser))
   ) {
+    changed = true;
     details.push(`:compass: Les données du site ont changé`);
   }
   if (
     state === null ||
     (state.latestFromAPI && JSON.stringify(latestFromAPI) !== JSON.stringify(state.latestFromAPI))
   ) {
+    changed = true;
     details.push(`:classical_building: Les données de l'API ont changé`);
   }
   if (JSON.stringify(latestFromBrowser) !== JSON.stringify(latestFromAPI)) {
-    if (state === null || state.status === true) {
+    if (changed === true || state === null || state.status === true) {
       if (latestFromBrowser.length < latestFromAPI.length) {
         for (let i = 0; i < latestFromAPI.length; i++) {
           if (i < latestFromBrowser.length) {
@@ -84,7 +87,7 @@ async function main() {
       latestFromBrowser: latestFromBrowser,
     });
   } else {
-    if (state === null || state.status === false) {
+    if (changed === true || state === null || state.status === false) {
       await Slack.SendMessage(
         `:large_green_square: Les données du bloc des dernières décisions sur le site correspondent de nouveau aux données de l'API.\n${details}`,
       );
