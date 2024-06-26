@@ -13,7 +13,7 @@ class API {
     try {
       response = await needle(
         'get',
-        `https://search.judilibre.io/export?batch=0&abridged=true&publication=b&publication=r&batch_size=20&sort=date&order=desc`,
+        `https://51.159.85.176/export?batch=0&abridged=true&publication=b&publication=r&batch_size=20&sort=date&order=desc`,
         {
           rejectUnauthorized: false,
         },
