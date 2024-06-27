@@ -10,74 +10,26 @@ const { Slack } = require('../modules/slack');
 
 async function main() {
   log.info('start probe');
+  let details = [];
   const state = await State.GetState('latest');
   const latestFromBrowser = await Browser.GetLatest();
   const latestFromAPI = await API.GetLatest();
-  let details = [];
-  let changed = false;
-  if (
-    state === null ||
-    (state.latestFromBrowser && JSON.stringify(latestFromBrowser) !== JSON.stringify(state.latestFromBrowser))
-  ) {
-    changed = true;
-    details.push(`:compass: Les données affichées par le site ont changé`);
+  if (state === null || JSON.stringify(latestFromBrowser) !== JSON.stringify(state.latestFromBrowser)) {
+    details.push(`:compass: Les données affichées par le site ont changé (bloc des dernières décisions)`);
   }
-  if (
-    state === null ||
-    (state.latestFromAPI && JSON.stringify(latestFromAPI) !== JSON.stringify(state.latestFromAPI))
-  ) {
-    changed = true;
-    details.push(`:classical_building: Les données retournées par l'API ont changé`);
+  if (state === null || JSON.stringify(latestFromAPI) !== JSON.stringify(state.latestFromAPI)) {
+    details.push(`:classical_building: Les données retournées par l'API ont changé (bloc des dernières décisions)`);
   }
-  if (JSON.stringify(latestFromBrowser) !== JSON.stringify(latestFromAPI)) {
-    if (changed === true || state === null || state.status === true) {
-      if (latestFromBrowser.length < latestFromAPI.length) {
-        for (let i = 0; i < latestFromAPI.length; i++) {
-          if (i < latestFromBrowser.length) {
-            if (JSON.stringify(latestFromAPI[i]) !== JSON.stringify(latestFromBrowser[i])) {
-              details.push(
-                `[n°${i + 1}] Site: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`${JSON.stringify(
-                  latestFromAPI[i],
-                )}\``,
-              );
-            }
-          } else {
-            details.push(`[n°${i + 1}] Site: \`absent\` / API: \`${JSON.stringify(latestFromAPI[i])}\``);
-          }
-        }
-      } else if (latestFromBrowser.length > latestFromAPI.length) {
-        for (let i = 0; i < latestFromBrowser.length; i++) {
-          if (i < latestFromAPI.length) {
-            if (JSON.stringify(latestFromAPI[i]) !== JSON.stringify(latestFromBrowser[i])) {
-              details.push(
-                `[n°${i + 1}] Site: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`${JSON.stringify(
-                  latestFromAPI[i],
-                )}\``,
-              );
-            }
-          } else {
-            details.push(`[n°${i + 1}] Site: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`absent\``);
-          }
-        }
-      } else {
-        if (latestFromBrowser.length > 0) {
-          for (let i = 0; i < latestFromBrowser.length; i++) {
-            if (JSON.stringify(latestFromAPI[i]) !== JSON.stringify(latestFromBrowser[i])) {
-              details.push(
-                `[n°${i + 1}] Site: \`${JSON.stringify(latestFromBrowser[i])}\` / API: \`${JSON.stringify(
-                  latestFromAPI[i],
-                )}\``,
-              );
-            }
-          }
-        } else {
-          details.push(`Site: \`vide\` / API: \`vide\``);
-        }
+  if (latestFromBrowser.length < 10 || latestFromAPI.length < 10) {
+    if (state && state.status === true) {
+      if (latestFromBrowser.length < 10) {
+        details.push(`:warning: :compass: Le site n'affiche aucune donnée (bloc des dernières décisions)`);
+      }
+      if (latestFromAPI.length < 10) {
+        details.push(`:warning: :classical_building: L'API ne retourne aucune donnée (bloc des dernières décisions)`);
       }
       details = details.join('\n');
-      await Slack.SendMessage(
-        `:large_red_square: Les données du bloc des dernières décisions sur le site ne correspondent pas aux données de l'API:\n${details}`,
-      );
+      await Slack.SendMessage(`:large_red_square: Anomalie détectée (bloc des dernières décisions) :\n${details}`);
     }
     await State.SetState('latest', {
       status: false,
@@ -85,10 +37,8 @@ async function main() {
       latestFromBrowser: latestFromBrowser,
     });
   } else {
-    if (changed === true || state === null || state.status === false) {
-      await Slack.SendMessage(
-        `:large_green_square: Les données du bloc des dernières décisions sur le site correspondent de nouveau aux données de l'API.\n${details}`,
-      );
+    if (state && state.status === false) {
+      await Slack.SendMessage(`:large_green_square: Fin de l'anomalie (bloc des dernières décisions).\n${details}`);
     }
     await State.SetState('latest', {
       status: true,

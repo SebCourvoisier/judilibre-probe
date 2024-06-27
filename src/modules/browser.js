@@ -35,21 +35,7 @@ class Browser {
     if (result.length === 0) {
       log.warn('no data');
     }
-    return result.sort((a, b) => {
-      if (a.date > b.date) {
-        return -1;
-      }
-      if (a.date < b.date) {
-        return 1;
-      }
-      if (a.pourvoi < b.pourvoi) {
-        return -1;
-      }
-      if (a.pourvoi > b.pourvoi) {
-        return 1;
-      }
-      return 0;
-    });
+    return result;
   }
 
   static async GetSearch(query) {
@@ -62,9 +48,8 @@ class Browser {
           `https://www.courdecassation.fr/recherche-judilibre?search_api_fulltext=&date_du=&date_au=&judilibre_juridiction=all&op=Rechercher%20sur%20judilibre`,
         );
       } else {
-        // @TODO
         await page.goto(
-          `https://www.courdecassation.fr/recherche-judilibre?search_api_fulltext=&date_du=&date_au=&judilibre_juridiction=all&op=Rechercher%20sur%20judilibre`,
+          `https://www.courdecassation.fr/recherche-judilibre?search_api_fulltext=${query}&date_du=&date_au=&judilibre_juridiction=all&op=Rechercher%20sur%20judilibre`,
         );
       }
       const searchResultSelector = '#block-ccass-content > div > div.view-judilibre';

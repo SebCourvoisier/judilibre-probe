@@ -10,76 +10,26 @@ const { Slack } = require('../modules/slack');
 
 async function main() {
   log.info('start probe');
+  let details = [];
   const state = await State.GetState('search');
   const searchFromBrowser = await Browser.GetSearch();
   const searchFromAPI = await API.GetSearch();
-  log.info(searchFromBrowser);
-  log.info(searchFromAPI);
-  let details = [];
-  let changed = false;
-  if (
-    state === null ||
-    (state.searchFromBrowser && JSON.stringify(searchFromBrowser) !== JSON.stringify(state.searchFromBrowser))
-  ) {
-    changed = true;
-    details.push(`:compass: Les données affichées par le site ont changé`);
+  if (state === null || JSON.stringify(searchFromBrowser) !== JSON.stringify(state.searchFromBrowser)) {
+    details.push(`:compass: Les données affichées par le site ont changé (recherche par défaut)`);
   }
-  if (
-    state === null ||
-    (state.searchFromAPI && JSON.stringify(searchFromAPI) !== JSON.stringify(state.searchFromAPI))
-  ) {
-    changed = true;
-    details.push(`:classical_building: Les données retournées par l'API ont changé`);
+  if (state === null || JSON.stringify(searchFromAPI) !== JSON.stringify(state.searchFromAPI)) {
+    details.push(`:classical_building: Les données retournées par l'API ont changé (recherche par défaut)`);
   }
-  if (JSON.stringify(searchFromBrowser) !== JSON.stringify(searchFromAPI)) {
-    if (changed === true || state === null || state.status === true) {
-      if (searchFromBrowser.length < searchFromAPI.length) {
-        for (let i = 0; i < searchFromAPI.length; i++) {
-          if (i < searchFromBrowser.length) {
-            if (JSON.stringify(searchFromAPI[i]) !== JSON.stringify(searchFromBrowser[i])) {
-              details.push(
-                `[n°${i + 1}] Site: \`${JSON.stringify(searchFromBrowser[i])}\` / API: \`${JSON.stringify(
-                  searchFromAPI[i],
-                )}\``,
-              );
-            }
-          } else {
-            details.push(`[n°${i + 1}] Site: \`absent\` / API: \`${JSON.stringify(searchFromAPI[i])}\``);
-          }
-        }
-      } else if (searchFromBrowser.length > searchFromAPI.length) {
-        for (let i = 0; i < searchFromBrowser.length; i++) {
-          if (i < searchFromAPI.length) {
-            if (JSON.stringify(searchFromAPI[i]) !== JSON.stringify(searchFromBrowser[i])) {
-              details.push(
-                `[n°${i + 1}] Site: \`${JSON.stringify(searchFromBrowser[i])}\` / API: \`${JSON.stringify(
-                  searchFromAPI[i],
-                )}\``,
-              );
-            }
-          } else {
-            details.push(`[n°${i + 1}] Site: \`${JSON.stringify(searchFromBrowser[i])}\` / API: \`absent\``);
-          }
-        }
-      } else {
-        if (searchFromBrowser.length > 0) {
-          for (let i = 0; i < searchFromBrowser.length; i++) {
-            if (JSON.stringify(searchFromAPI[i]) !== JSON.stringify(searchFromBrowser[i])) {
-              details.push(
-                `[n°${i + 1}] Site: \`${JSON.stringify(searchFromBrowser[i])}\` / API: \`${JSON.stringify(
-                  searchFromAPI[i],
-                )}\``,
-              );
-            }
-          }
-        } else {
-          details.push(`Site: \`vide\` / API: \`vide\``);
-        }
+  if (searchFromBrowser.length < 10 || searchFromAPI.length < 10) {
+    if (state && state.status === true) {
+      if (searchFromBrowser.length < 10) {
+        details.push(`:warning: :compass: Le site n'affiche aucune donnée (recherche par défaut)`);
+      }
+      if (searchFromAPI.length < 10) {
+        details.push(`:warning: :classical_building: L'API ne retourne aucune donnée (recherche par défaut)`);
       }
       details = details.join('\n');
-      await Slack.SendMessage(
-        `:large_red_square: Les résultats de la recherche sur le site ne correspondent pas aux résultats de l'API:\n${details}`,
-      );
+      await Slack.SendMessage(`:large_red_square: Anomalie détectée (recherche par défaut) :\n${details}`);
     }
     await State.SetState('search', {
       status: false,
@@ -87,10 +37,8 @@ async function main() {
       searchFromBrowser: searchFromBrowser,
     });
   } else {
-    if (changed === true || state === null || state.status === false) {
-      await Slack.SendMessage(
-        `:large_green_square: Les résultats de la recherche sur le site correspondent de nouveau aux résultats de l'API.\n${details}`,
-      );
+    if (state && state.status === false) {
+      await Slack.SendMessage(`:large_green_square: Fin de l'anomalie (recherche par défaut).\n${details}`);
     }
     await State.SetState('search', {
       status: true,
