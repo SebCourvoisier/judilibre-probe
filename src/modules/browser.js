@@ -44,14 +44,12 @@ class Browser {
       const browser = await puppeteer.launch();
       const page = await browser.newPage();
       if (query === undefined) {
-        await page.goto(
-          `https://www.courdecassation.fr/recherche-judilibre?search_api_fulltext=&date_du=&date_au=&judilibre_juridiction=all&op=Rechercher%20sur%20judilibre`,
-        );
-      } else {
-        await page.goto(
-          `https://www.courdecassation.fr/recherche-judilibre?search_api_fulltext=${query}&date_du=&date_au=&judilibre_juridiction=all&op=Rechercher%20sur%20judilibre`,
-        );
+        query = '';
       }
+      await page.goto(
+        `https://www.courdecassation.fr/recherche-judilibre?search_api_fulltext=${query}&date_du=&date_au=&judilibre_juridiction=all&op=Rechercher%20sur%20judilibre`,
+      );
+
       const searchResultSelector = '#block-ccass-content > div > div.view-judilibre';
       const searchResultBlock = await page.$(searchResultSelector);
       const searchArretSelector = '.decision-item';

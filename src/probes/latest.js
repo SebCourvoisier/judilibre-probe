@@ -28,8 +28,9 @@ async function main() {
       if (latestFromAPI.length < 10) {
         details.push(`:warning: :classical_building: L'API ne retourne aucune donnée (bloc des dernières décisions)`);
       }
-      details = details.join('\n');
-      await Slack.SendMessage(`:large_red_square: Anomalie détectée (bloc des dernières décisions) :\n${details}`);
+      await Slack.SendMessage(
+        `:large_red_square: Anomalie détectée (bloc des dernières décisions) :\n${details.join('\n')}`,
+      );
     }
     await State.SetState('latest', {
       status: false,
@@ -38,8 +39,9 @@ async function main() {
     });
   } else {
     if (state && state.status === false) {
-      details = details.join('\n');
-      await Slack.SendMessage(`:large_green_square: Fin de l'anomalie (bloc des dernières décisions).\n${details}`);
+      await Slack.SendMessage(
+        `:large_green_square: Fin de l'anomalie (bloc des dernières décisions).\n${details.join('\n')}`,
+      );
     }
     await State.SetState('latest', {
       status: true,

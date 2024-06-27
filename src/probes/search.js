@@ -28,8 +28,7 @@ async function main() {
       if (searchFromAPI.length < 10) {
         details.push(`:warning: :classical_building: L'API ne retourne aucune donnée (recherche par défaut)`);
       }
-      details = details.join('\n');
-      await Slack.SendMessage(`:large_red_square: Anomalie détectée (recherche par défaut) :\n${details}`);
+      await Slack.SendMessage(`:large_red_square: Anomalie détectée (recherche par défaut) :\n${details.join('\n')}`);
     }
     await State.SetState('search', {
       status: false,
@@ -38,8 +37,7 @@ async function main() {
     });
   } else {
     if (state && state.status === false) {
-      details = details.join('\n');
-      await Slack.SendMessage(`:large_green_square: Fin de l'anomalie (recherche par défaut).\n${details}`);
+      await Slack.SendMessage(`:large_green_square: Fin de l'anomalie (recherche par défaut).\n${details.join('\n')}`);
     }
     await State.SetState('search', {
       status: true,
