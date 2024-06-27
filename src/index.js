@@ -11,11 +11,11 @@ const bree = new Bree({
   jobs: [
     {
       name: 'latest',
-      interval: 'every 2 minute after 7:00am and before 11:00pm',
+      interval: 'every 11 seconds after 7:00am and before 11:00pm',
     },
     {
       name: 'search',
-      interval: 'every 3 minute after 7:00am and before 11:00pm',
+      interval: 'every 31 seconds after 7:00am and before 11:00pm',
     },
   ],
 });
