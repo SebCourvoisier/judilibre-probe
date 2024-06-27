@@ -38,6 +38,7 @@ async function main() {
     });
   } else {
     if (state && state.status === false) {
+      details = details.join('\n');
       await Slack.SendMessage(`:large_green_square: Fin de l'anomalie (recherche par défaut).\n${details}`);
     }
     await State.SetState('search', {
