@@ -15,6 +15,9 @@ class API {
         'get',
         `https://search.judilibre.io/export?batch=0&abridged=true&publication=b&publication=r&batch_size=20&sort=date&order=desc`,
         {
+          open_timeout: 10000,
+          response_timeout: 10000,
+          read_timeout: 10000,
           rejectUnauthorized: false,
         },
       );
@@ -48,6 +51,9 @@ class API {
         'get',
         `https://search.judilibre.io/search?query=${query}&resolve_references=true&jurisdiction=cc&jurisdiction=ca&jurisdiction=tj&sort=date&order=desc`,
         {
+          open_timeout: 10000,
+          response_timeout: 10000,
+          read_timeout: 10000,
           rejectUnauthorized: false,
         },
       );

@@ -11,7 +11,9 @@ class Browser {
     try {
       const browser = await puppeteer.launch();
       const page = await browser.newPage();
-      await page.goto('https://www.courdecassation.fr');
+      page.setDefaultTimeout(10000);
+      page.setDefaultNavigationTimeout(10000);
+      await page.goto('https://www.courdecassation.fr', { waitUntil: 'load', timeout: 10000 });
       const searchResultSelector = '#block-derniersarretsblock';
       const derniersArretsBlock = await page.$(searchResultSelector);
       const searchArretSelector = '.arret';
@@ -43,13 +45,15 @@ class Browser {
     try {
       const browser = await puppeteer.launch();
       const page = await browser.newPage();
+      page.setDefaultTimeout(10000);
+      page.setDefaultNavigationTimeout(10000);
       if (query === undefined) {
         query = '';
       }
       await page.goto(
         `https://www.courdecassation.fr/recherche-judilibre?search_api_fulltext=${query}&date_du=&date_au=&judilibre_juridiction=all&op=Rechercher%20sur%20judilibre`,
+        { waitUntil: 'load', timeout: 10000 },
       );
-
       const searchResultSelector = '#block-ccass-content > div > div.view-judilibre';
       const searchResultBlock = await page.$(searchResultSelector);
       const searchArretSelector = '.decision-item';
