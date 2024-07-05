@@ -8,6 +8,11 @@ const { Browser } = require('../modules/browser');
 const { API } = require('../modules/api');
 const { Slack } = require('../modules/slack');
 
+const exitTimeout = setTimeout(function () {
+  log.info('force exit probe');
+  process.exit(1);
+}, 30 * 1000);
+
 async function main() {
   log.info('start probe');
   let details = [];
@@ -46,6 +51,8 @@ async function main() {
     });
   }
   log.info('end probe');
+  clearTimeout(exitTimeout);
+  process.exit(0);
 }
 
 main();
